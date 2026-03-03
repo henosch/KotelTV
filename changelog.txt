@@ -1,0 +1,14 @@
+KotelTV – Android TV App für Live-Streams der drei Kotel-Kameras (Wilson's Arch, Prayer Plaza, Western Wall)
+
+Neu
+- Menü blendet sich nach 10 Sekunden Inaktivität aus und erscheint bei Tastendruck sofort wieder.
+- Fokus springt beim Einblenden direkt auf den aktuell ausgewählten Stream.
+- Standard-Stream beim Start ist Cam 2 (Prayer Plaza).
+- Zappen: Streamwechsel erfolgt direkt beim Navigieren (ohne OK).
+- Überarbeitetes UI: kein Button-Hintergrund, klare Fokus-Umrandung, bessere Lesbarkeit der Labels.
+
+Technik
+- Jetpack Compose TV UI
+- Media3/ExoPlayer mit HLS
+- PlayerView via AndroidView
+- Fokus-/Key-Handling und Auto-Hide-Logik in Compose

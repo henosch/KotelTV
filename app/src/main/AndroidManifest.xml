@@ -9,7 +9,7 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/banner"
-        android:label="Kotel TV"
+        android:label="CarmenTV"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         android:banner="@drawable/banner">
         <activity

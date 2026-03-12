@@ -1,4 +1,4 @@
-KotelTV – Android TV App für Live-Streams der drei Kotel-Kameras (Wilson's Arch, Prayer Plaza, Western Wall)
+CarmenTV – Android TV App für Live-Streams von TV-Sendern
 
 Neu
 - Menü blendet sich nach 10 Sekunden Inaktivität aus und erscheint bei Tastendruck sofort wieder.

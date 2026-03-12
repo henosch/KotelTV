@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace "de.henosch.carmentv"
+    namespace "de.henosch.koteltv"
     compileSdk 34
 
     defaultConfig {
-        applicationId "de.henosch.carmentv"
+        applicationId "de.henosch.koteltv"
         minSdk 21
         targetSdk 34
         versionCode 1

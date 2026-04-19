@@ -1,9 +1,14 @@
 .DS_Store
 .gradle/
+.gradle-bootstrap/
 .gradle-local/
+.omx/
+.external/
+_external/
 .idea/
 *.iml
 local.properties
+keystore.properties
 **/build/
 /build/
 *.apk

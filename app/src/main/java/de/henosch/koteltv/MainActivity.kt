@@ -144,9 +144,9 @@ fun KotelTVApp() {
             StreamInfo("Prayer Plaza", StreamSource.Hls("https://cdn.cast-tv.com/23595/Live_Kotel2_ABR/playlist.m3u8")),
             StreamInfo("Western Wall", StreamSource.Hls("https://cdn.cast-tv.com/23595/Live_Kotel3_ABR/playlist.m3u8")),
             StreamInfo("EarthCam", StreamSource.YouTube("https://www.youtube.com/watch?v=77akujLn4k8")),
-            StreamInfo("Archaeological Park", StreamSource.YouTube("https://www.youtube.com/watch?v=EGfiC6zIpEw")),
-            StreamInfo("Gethsemane", StreamSource.YouTube("https://www.youtube.com/watch?v=kXOjSHqo8dE")),
-            StreamInfo("JFMM", StreamSource.YouTube("https://www.youtube.com/watch?v=fTaKsyMuP_M"))
+            StreamInfo("Archaeological Park", StreamSource.YouTube("https://www.youtube.com/watch?v=zp6LNSoq000")),
+            StreamInfo("Golden Gate", StreamSource.YouTube("https://www.youtube.com/watch?v=kXOjSHqo8dE")),
+            StreamInfo("kotel nah", StreamSource.YouTube("https://www.youtube.com/watch?v=AKGqd20ik_A"))
         )
     }
     
@@ -435,7 +435,7 @@ fun KotelTVApp() {
             factory = {
                 PlayerView(it).apply {
                     player = exoPlayer
-                    useController = true // Standard TV Controller anzeigen
+                    useController = false
                     isFocusable = false
                     isFocusableInTouchMode = false
                 }

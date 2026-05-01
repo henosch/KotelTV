@@ -25,6 +25,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MimeTypes
+import androidx.media3.common.PlaybackException
+import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import androidx.tv.material3.*
@@ -163,12 +165,22 @@ fun KotelTVApp() {
     val streamListState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
     val itemWidth = 160.dp
-    val wilsonClicks = remember { mutableStateListOf<Long>() }
+    val sabbathToggleClicks = remember { mutableStateListOf<Long>() }
     val isQuietActive = remember(nowMillis, saOverride) {
         !saOverride && isQuietWindow(nowMillis)
     }
     var playerLoadingMessage by remember { mutableStateOf<String?>(null) }
     var playerErrorMessage by remember { mutableStateOf<String?>(null) }
+
+    fun showPlayerError(message: String, error: Throwable? = null) {
+        playerLoadingMessage = null
+        playerErrorMessage = message
+        if (error != null) {
+            Log.e("KotelTV", message, error)
+        } else {
+            Log.e("KotelTV", message)
+        }
+    }
 
     fun buildHlsMediaItem(url: String): MediaItem {
         return MediaItem.Builder()
@@ -316,6 +328,18 @@ fun KotelTVApp() {
             }
         }
     }
+
+    DisposableEffect(exoPlayer, selectedStream.name) {
+        val listener = object : Player.Listener {
+            override fun onPlayerError(error: PlaybackException) {
+                showPlayerError("${selectedStream.name} konnte nicht geladen werden", error)
+            }
+        }
+        exoPlayer.addListener(listener)
+        onDispose {
+            exoPlayer.removeListener(listener)
+        }
+    }
     
     LaunchedEffect(selectedStream) {
         when (val source = selectedStream.source) {
@@ -343,8 +367,7 @@ fun KotelTVApp() {
                     }
                     playerLoadingMessage = null
                 } else {
-                    playerLoadingMessage = null
-                    playerErrorMessage = "${selectedStream.name} konnte nicht geladen werden"
+                    showPlayerError("${selectedStream.name} konnte nicht geladen werden")
                 }
             }
         }
@@ -391,6 +414,25 @@ fun KotelTVApp() {
                     lastInteractionAt = SystemClock.uptimeMillis()
                     menuVisible = true
                     when (event.nativeKeyEvent.keyCode) {
+                        android.view.KeyEvent.KEYCODE_DPAD_UP -> {
+                            val now = SystemClock.uptimeMillis()
+                            sabbathToggleClicks.add(now)
+                            while (
+                                sabbathToggleClicks.isNotEmpty() &&
+                                now - sabbathToggleClicks.first() > 3000L
+                            ) {
+                                sabbathToggleClicks.removeAt(0)
+                            }
+                            if (sabbathToggleClicks.size >= 7) {
+                                val next = !saOverride
+                                saOverride = next
+                                sabbathToggleClicks.clear()
+                                val msg = if (next) "off" else "on"
+                                Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+                            }
+                            return@onPreviewKeyEvent true
+                        }
+
                         android.view.KeyEvent.KEYCODE_DPAD_LEFT -> {
                             selectedIndex = if (selectedIndex == 0) streams.lastIndex else selectedIndex - 1
                             coroutineScope.launch {
@@ -409,20 +451,6 @@ fun KotelTVApp() {
 
                         android.view.KeyEvent.KEYCODE_DPAD_CENTER,
                         android.view.KeyEvent.KEYCODE_ENTER -> {
-                            if (selectedIndex == 0) {
-                                val now = SystemClock.uptimeMillis()
-                                wilsonClicks.add(now)
-                                while (wilsonClicks.isNotEmpty() && now - wilsonClicks.first() > 3000L) {
-                                    wilsonClicks.removeAt(0)
-                                }
-                                if (wilsonClicks.size >= 7) {
-                                    val next = !saOverride
-                                    saOverride = next
-                                    wilsonClicks.clear()
-                                    val msg = if (next) "off" else "on"
-                                    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
-                                }
-                            }
                             return@onPreviewKeyEvent true
                         }
                     }
